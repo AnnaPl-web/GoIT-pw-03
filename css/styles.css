@@ -15,6 +15,8 @@ html {
   --color-svg: #afb1b8;
   --footer-svg-bcg: rgba(255, 255, 255, 0.1);
   --card-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.12), 0px 4px 4px rgba(0, 0, 0, 0.06), 1px 4px 6px rgba(0, 0, 0, 0.16);
+  --time-for-animation: 250ms;
+  --function-time: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body {
@@ -24,6 +26,13 @@ body {
   letter-spacing: 0.03em;
   /* margin: 0; */
 }
+.link {
+  transition: transform var(--time-for-animation) var(--function-time),
+    border-color var(--time-for-animation) var(--function-time),
+    background-color var(--time-for-animation) var(--function-time), fill var(--time-for-animation) var(--function-time),
+    color var(--time-for-animation) var(--function-time);
+}
+
 .logo {
   color: var(--main-text-color);
   text-decoration: none;
@@ -97,6 +106,7 @@ body {
   color: var(--accent-text-color);
 }
 .site-nav .link {
+  position: relative;
   color: var(--main-text-color);
   font-weight: 500;
   font-size: 14px;
@@ -193,6 +203,60 @@ body {
   display: flex;
 }
 
+/* <!-- Owerlay --> */
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  opacity: 1;
+}
+
+.modal {
+  position: absolute;
+  overflow: auto;
+  max-width: 100%;
+  top: 50%;
+  left: 50%;
+  width: 520px;
+  height: 581px;
+  border-radius: 4px;
+  padding: 8px;
+  background-color: var(--white-text-color);
+  transform: translate(-50%, -50%);
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14), 0px 2px 1px rgba(0, 0, 0, 0.2);
+}
+.backdrop.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.modal-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  height: 30px;
+  width: 30px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-radius: 50%;
+  background-color: var(--white-text-color);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.svg-modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 11px;
+  height: 11px;
+  fill: #000000;
+}
+
 /* Секция 3 */
 .work {
   text-align: center;
@@ -209,6 +273,31 @@ body {
   text-align: center;
   color: var(--main-text-color);
 }
+.work-text {
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.14;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--white-text-color);
+  position: absolute;
+  bottom: 0;
+
+  transform: translate(50%, -50%);
+}
+
+.work-text-bcg {
+  background: rgba(47, 48, 58, 0.8);
+  width: 370px;
+  height: 70px;
+  position: absolute;
+  bottom: 0;
+}
+
+.pictures {
+  position: relative;
+}
+
 .work .list {
   display: flex;
 }
@@ -319,6 +408,16 @@ img {
   padding: 6px 22px;
   background-color: var(--bg-button-color);
 }
+.link.current::after {
+  content: '';
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 4px;
+  bottom: -1px;
+  background-color: var(--accent-text-color);
+  border-radius: 2px;
+}
 .button.current {
   background-color: var(--accent-text-color);
   color: var(--white-text-color);
@@ -405,6 +504,10 @@ img {
   font-size: 14px;
   line-height: 1.7;
 }
+.footer-auth:hover,
+.footer-auth:focus {
+  color: var(--accent-text-color);
+}
 .footer-nav .item:not(:last-child) {
   margin-bottom: 9px;
 }
@@ -487,6 +590,10 @@ img {
   margin-top: -30px;
 }
 .card-set {
+  display: block;
+  position: relative;
+  top: 100%;
+  width: 100%;
   flex-basis: calc((100%-30px) / 3);
   max-width: 370px;
   max-height: 404px;
@@ -495,7 +602,48 @@ img {
   justify-content: center;
   background: var(--white-text-color);
   border: 1px solid #eeeeee;
+}
+.card-set:hover,
+.card-set:focus {
   box-shadow: var(--card-box-shadow);
+}
+
+/* Overlay */
+.overlay-text {
+  margin: 0;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.56;
+  color: var(--white-text-color);
+}
+.card-thumb {
+  position: relative;
+  overflow: hidden;
+}
+.overlay-portfolio {
+  position: absolute;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  padding: 63px 24px;
+  opacity: 0;
+  transform: translateY(100%);
+  transition: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: rgba(33, 150, 243, 0.9);
+}
+
+.card-link:hover .overlay-portfolio,
+.card-link:focus .overlay-portfolio {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.card-link {
+  display: block;
+}
+
+.card-link.link {
+  text-decoration: none;
 }
 .card-info {
   margin: 0;
@@ -568,7 +716,7 @@ img {
   display: flex;
   justify-content: center;
   align-items: center;
-
+  outline-color: var(--accent-text-color);
   fill: var(--color-svg);
   width: 170px;
   height: 92px;
